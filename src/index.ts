@@ -156,8 +156,11 @@ app.get('/', (c) => {
   });
 });
 
+const workerStartTime = Date.now();
+
 app.get('/v1/health', (c) => {
-  return c.json({ status: 'ok', uptime: process.uptime?.() || 0, timestamp: new Date().toISOString() });
+  const uptime = Math.round((Date.now() - workerStartTime) / 1000);
+  return c.json({ status: 'ok', uptime, timestamp: new Date().toISOString() });
 });
 
 app.get('/v1/credits', (c) => {
