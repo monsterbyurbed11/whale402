@@ -1,15 +1,14 @@
-FROM node:20-slim AS builder
+FROM node:20-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
 
-FROM node:20-slim AS runner
-WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
-COPY --from=builder /app/dist ./dist
-ENV NODE_ENV=production
-EXPOSE 8787
-CMD ["node", "dist/index.js"]
+RUN npm ci --ignore-scripts
+
+COPY . .
+RUN npm run build && chown -R node:node /app
+
+USER node
+
+ENV PORT=8788
+
+CMD ["node", "dist/mcp/server.js"]
