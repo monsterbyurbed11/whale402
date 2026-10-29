@@ -268,4 +268,134 @@ app.get('/v1/wallet-profiler', paywall402({ costUsdc: 0.01, costSats: 10 }), asy
   }
 });
 
+// HTTP MCP Endpoint for Glama Inspector, Web Bridges, Cursor & Claude
+app.get('/mcp', (c) => {
+  return c.json({
+    status: 'ready',
+    service: 'whale402-smart-money-mcp',
+    version: '1.0.0',
+    capabilities: { tools: true },
+    tools: MCP_TOOLS,
+  });
+});
+
+app.post('/mcp', async (c) => {
+  let body: any;
+  try {
+    body = await c.req.json();
+  } catch (err: any) {
+    return c.json({
+      jsonrpc: '2.0',
+      id: null,
+      error: { code: -32700, message: `Parse error: ${err?.message || 'Invalid JSON'}` },
+    });
+  }
+
+  const { id, method, params } = body || {};
+
+  if (method === 'initialize') {
+    return c.json({
+      jsonrpc: '2.0',
+      id: id ?? null,
+      result: {
+        protocolVersion: '2024-11-05',
+        capabilities: { tools: {} },
+        serverInfo: {
+          name: 'whale402-smart-money-mcp',
+          version: '1.0.0',
+        },
+      },
+    });
+  }
+
+  if (method === 'notifications/initialized') {
+    return c.body(null, 204);
+  }
+
+  if (method === 'ping') {
+    return c.json({
+      jsonrpc: '2.0',
+      id: id ?? null,
+      result: {},
+    });
+  }
+
+  if (method === 'tools/list') {
+    return c.json({
+      jsonrpc: '2.0',
+      id: id ?? null,
+      result: { tools: MCP_TOOLS },
+    });
+  }
+
+  if (method === 'tools/call') {
+    const toolName = params?.name;
+    const args = params?.arguments || {};
+    const paymentProof = typeof args.paymentProof === 'string' ? args.paymentProof : undefined;
+
+    let subPath = '';
+    if (toolName === 'get_credits_and_payment_info') {
+      const txHash = typeof args.txHash === 'string' ? args.txHash.trim() : '';
+      subPath = txHash ? `/v1/credits?txHash=${encodeURIComponent(txHash)}` : '/v1/credits';
+    } else if (toolName === 'get_token_whale_activity') {
+      const network = String(args.network || 'base').toLowerCase();
+      const tokenAddress = typeof args.tokenAddress === 'string' ? args.tokenAddress.trim() : '';
+      subPath = `/v1/token-whales?network=${encodeURIComponent(network)}&tokenAddress=${encodeURIComponent(tokenAddress)}`;
+    } else if (toolName === 'get_smart_money_radar') {
+      const network = args.network ? String(args.network).toLowerCase() : '';
+      const limit = args.limit ? Number(args.limit) : 10;
+      subPath = `/v1/smart-money-radar?limit=${limit}${network ? `&network=${encodeURIComponent(network)}` : ''}`;
+    } else if (toolName === 'detect_insider_clusters') {
+      const network = String(args.network || 'base').toLowerCase();
+      const tokenAddress = typeof args.tokenAddress === 'string' ? args.tokenAddress.trim() : '';
+      subPath = `/v1/insider-cluster?network=${encodeURIComponent(network)}&tokenAddress=${encodeURIComponent(tokenAddress)}`;
+    } else if (toolName === 'profile_wallet_smart_money') {
+      const network = String(args.network || 'base').toLowerCase();
+      const walletAddress = typeof args.walletAddress === 'string' ? args.walletAddress.trim() : '';
+      subPath = `/v1/wallet-profiler?network=${encodeURIComponent(network)}&walletAddress=${encodeURIComponent(walletAddress)}`;
+    } else {
+      return c.json({
+        jsonrpc: '2.0',
+        id: id ?? null,
+        error: { code: -32601, message: `Tool not found: ${toolName}` },
+      });
+    }
+
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'X-MCP-Client-ID': `http_mcp_${Date.now()}`,
+    };
+    if (paymentProof) {
+      if (paymentProof.startsWith('x402 ') || paymentProof.startsWith('Bearer ')) {
+        headers['Authorization'] = paymentProof;
+      } else {
+        headers['Authorization'] = `x402 ${paymentProof}`;
+      }
+    }
+
+    const subRes = await app.request(subPath, { method: 'GET', headers }, c.env);
+    const subData = await subRes.json();
+
+    return c.json({
+      jsonrpc: '2.0',
+      id: id ?? null,
+      result: {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(subData, null, 2),
+          },
+        ],
+        isError: subRes.status >= 400,
+      },
+    });
+  }
+
+  return c.json({
+    jsonrpc: '2.0',
+    id: id ?? null,
+    error: { code: -32601, message: `Method not implemented: ${method}` },
+  });
+});
+
 export default app;
