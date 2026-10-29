@@ -1,12 +1,36 @@
 {
-  "$schema": "https://glama.ai/mcp/schemas/server.json",
-  "name": "whale402",
-  "displayName": "Whale402: Smart Money Whale Tracker & Insider Cluster Radar",
-  "description": "Real-time Smart Money whale accumulation tracking, insider cabal / sybil cluster audits, and wallet copy-trade profiler for AI agents and trading bots with Base USDC micropayments.",
-  "homepage": "https://github.com/monsterbyurbed11/whale402",
-  "repository": "https://github.com/monsterbyurbed11/whale402",
-  "license": "MIT",
-  "categories": ["finance", "crypto", "developer-tools"],
+  "$schema": "https://glama.ai/mcp/glama.schema.json",
+  "name": "Whale402 — Smart Money Whale Radar, Insider Cabal Audits & Copy-Trade Profiler MCP",
+  "description": "Real-time Smart Money whale accumulation tracking, insider cabal / sybil cluster audits, and wallet copy-trade profiler for AI agents and trading bots with Base USDC micropayments and 3 free daily calls across Base, Solana, Ethereum, Arbitrum, BSC & Polygon.",
+  "maintainers": [
+    "monsterbyurbed11"
+  ],
+  "categories": [
+    "cryptocurrency",
+    "blockchain",
+    "finance",
+    "security",
+    "developer-tools"
+  ],
+  "keywords": [
+    "whale-tracker",
+    "smart-money",
+    "copy-trading",
+    "insider-cluster",
+    "sybil-detection",
+    "dexscreener",
+    "crypto-trading",
+    "base",
+    "solana",
+    "ethereum",
+    "coinbase-x402",
+    "x402",
+    "ai-agents",
+    "trading-bot",
+    "elizaos",
+    "mcp",
+    "model-context-protocol"
+  ],
   "tools": [
     {
       "name": "get_token_whale_activity",
