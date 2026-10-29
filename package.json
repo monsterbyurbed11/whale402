@@ -1,0 +1,58 @@
+{
+  "name": "whale402-mcp",
+  "version": "1.0.0",
+  "description": "Smart Money Whale Tracker, Insider Cluster Detection & Wallet Copy-Trade Profiler MCP Server for AI Agents (3 Free Daily Calls + Coinbase x402 & Prepaid Base USDC)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "whale402": "dist/mcp/server.js",
+    "whale402-mcp": "dist/mcp/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "tsx src/server-node.ts",
+    "dev": "tsx watch src/server-node.ts",
+    "test-agent": "tsx test-agent.ts",
+    "mcp": "node dist/mcp/server.js",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai-agents",
+    "smart-money",
+    "whale-tracker",
+    "copy-trading",
+    "insider-cluster",
+    "sybil-detection",
+    "http-402",
+    "x402",
+    "coinbase-x402",
+    "crypto",
+    "dex",
+    "alpha",
+    "base",
+    "solana",
+    "trading-bot",
+    "agentic-payments",
+    "elizaos",
+    "mcp",
+    "model-context-protocol"
+  ],
+  "author": "monsterbyurbed11",
+  "license": "MIT",
+  "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.13.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.152.0"
+  }
+}

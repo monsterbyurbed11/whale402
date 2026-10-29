@@ -1,0 +1,32 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "whale402",
+  "displayName": "Whale402: Smart Money Whale Tracker & Insider Cluster Radar",
+  "description": "Real-time Smart Money whale accumulation tracking, insider cabal / sybil cluster audits, and wallet copy-trade profiler for AI agents and trading bots with Base USDC micropayments.",
+  "homepage": "https://github.com/monsterbyurbed11/whale402",
+  "repository": "https://github.com/monsterbyurbed11/whale402",
+  "license": "MIT",
+  "categories": ["finance", "crypto", "developer-tools"],
+  "tools": [
+    {
+      "name": "get_token_whale_activity",
+      "description": "Inspects top holders and recent large trades for a token to measure Smart Money net inflow, whale holding dominance, and whale accumulation score."
+    },
+    {
+      "name": "get_smart_money_radar",
+      "description": "Scans across Base, Solana, Ethereum, BSC, and Arbitrum for tokens being aggressively accumulated by verified high-win-rate (>70%) wallets."
+    },
+    {
+      "name": "detect_insider_clusters",
+      "description": "Audits top token holders for sybil bundling, shared funding sources, and dev cabal distribution."
+    },
+    {
+      "name": "profile_wallet_smart_money",
+      "description": "Analyzes a wallet's trading track record, win rate, 30d ROI, and assigns a CopyTradeGrade (A+ to F)."
+    },
+    {
+      "name": "get_credits_and_payment_info",
+      "description": "Returns remaining prepaid USDC balance, free trial status, and deposit instructions."
+    }
+  ]
+}

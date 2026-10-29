@@ -1,0 +1,13 @@
+name = "whale402"
+main = "src/index.ts"
+compatibility_date = "2024-10-01"
+
+[vars]
+ENABLE_SANDBOX = "false"
+FREE_TRIAL_DAILY_LIMIT = "3"
+COST_USDC = "0.02"
+COST_SATS = "20"
+
+[[kv_namespaces]]
+binding = "WHALE402_KV"
+id = "whale402_kv_namespace"
